@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zona Hidalgo Radio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .hero-bg {
+      background-image: url('https://scontent.fmex19-1.fna.fbcdn.net/v/t39.30808-6/535352029_3206072339559479_6304028711853098094_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=HvBB_Y68cZsQ7kNvwG6cYQZ&_nc_oc=AdlIB7A8SLweHztB1rPYjJVCO1cY-enLrWV0R-BwKwmZVf4kPGZvUYaweDFAgHfYmM5p5ahazsdrMqRECnxFXima&_nc_zt=23&_nc_ht=scontent.fmex19-1.fna&_nc_gid=a9_l_E_mO2NJGIiZRVvH3A&oh=00_AfUOpM_5g70z-2G8gE78XWCRwqq9FPoZfmFTOg7Hn2nNlA&oe=68B02534');
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-900">
+  <!-- Header -->
+  <header class="bg-blue-600 text-white p-6 shadow-md">
+    <div class="container mx-auto flex justify-between items-center">
+      <img src="/mnt/data/WhatsApp Image 2025-08-19 at 16.38.31.jpeg" alt="Zona Hidalgo" class="h-16">
+      <nav>
+        <ul class="flex gap-6">
+          <li><a href="#inicio" class="hover:text-gray-200">Inicio</a></li>
+          <li><a href="#programacion" class="hover:text-gray-200">Programación</a></li>
+          <li><a href="#nosotros" class="hover:text-gray-200">Nosotros</a></li>
+          <li><a href="https://wa.me/7751641031" target="_blank" class="hover:text-gray-200">Contacto</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="inicio" class="text-center hero-bg h-[70vh] flex items-center justify-center relative">
+    <div class="absolute inset-0 bg-black bg-opacity-20"></div>
+    <div class="relative z-10 p-10 rounded-2xl">
+      <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">¡Tu estación favorita en México!</h2>
+      <p class="text-lg text-gray-200 mb-6">Música, cultura y entretenimiento 24/7</p>
+      <div class="bg-white bg-opacity-30 backdrop-blur-md rounded-2xl p-6 shadow-lg w-full max-w-md mx-auto">
+        <h3 class="text-xl font-semibold text-blue-400 mb-3 animate-pulse">🔴 En Vivo</h3>
+        <audio id="radioPlayer" controls class="w-full rounded-lg">
+          <source src="javascript:;" type="audio/mpeg">
+          Tu navegador no soporta el reproductor de audio.
+        </audio>
+        <a href="https://zonahidalgo.radiostream123.com/" target="_blank" class="mt-4 inline-block bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full font-bold shadow-md">▶ Escuchar Ahora</a>
+        <a href="https://wa.me/7751641031" target="_blank" class="mt-4 inline-block bg-blue-400 hover:bg-blue-500 text-white px-6 py-2 rounded-full font-bold shadow-md ml-4">📩 Enviar Mensaje</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Programación -->
+  <section id="programacion" class="py-16 container mx-auto">
+    <h2 class="text-3xl font-bold text-center mb-10 text-blue-600">📅 Nuestra Programación</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="bg-blue-300 p-6 rounded-2xl shadow-md">
+        <h3 class="font-bold text-xl mb-2 text-white">Mañanitas Musicales</h3>
+        <p class="text-gray-100">Lunes a Viernes - 8:00 AM</p>
+      </div>
+      <div class="bg-blue-200 p-6 rounded-2xl shadow-md">
+        <h3 class="font-bold text-xl mb-2 text-white">Anime & Cultura Pop</h3>
+        <p class="text-gray-100">Martes y Jueves - 6:00 PM</p>
+      </div>
+      <div class="bg-blue-100 p-6 rounded-2xl shadow-md">
+        <h3 class="font-bold text-xl mb-2 text-blue-900">Zona Crítica</h3>
+        <p class="text-gray-800">Domingos - 8:00 PM</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Nosotros -->
+  <section id="nosotros" class="bg-white py-16">
+    <div class="container mx-auto text-center max-w-3xl">
+      <h2 class="text-3xl font-bold mb-6 text-blue-700">ℹ️ Nosotros</h2>
+      <p class="text-gray-800 text-lg">
+        Zona Hidalgo estación de radio independiente transmitiendo desde Tepeapulco Hidalgo, con el trabajo y el respaldo de la compañía de arte independiente <strong>Producciones Escénicas Y... ¿Por que No?</strong>, con el actor de teatro y doblaje en cabina y audio <strong>Argel Jovanny Zamora Lozano</strong> y con el director de teatro <strong>Salvador Aguayo</strong>. Transmitiendo las 24 horas los 365 días del año. Fundada el <strong>1 de Septiembre del 2025</strong>.
+      </p>
+    </div>
+  </section>
+
+  <!-- Contacto -->
+  <section id="contacto" class="py-16 container mx-auto">
+    <h2 class="text-3xl font-bold text-center mb-8 text-blue-600">📩 Contáctanos</h2>
+    <p class="text-center text-lg mb-2 text-blue-700">Tel: <strong>7751641031</strong></p>
+    <p class="text-center text-lg mb-4">Correo: <a href="mailto:zonahidalgo38@gmail.com" class="text-blue-500 hover:text-blue-700 font-semibold">zonahidalgo38@gmail.com</a></p>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-blue-500 text-white p-6 text-center">
+    <p>© 2025 Zona Hidalgo Radio | Síguenos en redes</p>
+    <div class="flex justify-center gap-6 mt-3">
+      <a href="https://www.facebook.com/profile.php?id=61579811332106" target="_blank" class="hover:text-blue-200">Facebook</a>
+      <a href="https://www.tiktok.com/@zona.hidalgo" target="_blank" class="hover:text-blue-200">TikTok</a>
+    </div>
+    <!-- Contador de visitantes -->
+    <div class="mt-4 text-gray-700">
+      👥 Visitantes en la página: <span id="visitorCounter">0</span>
+    </div>
+  </footer>
+
+  <script>
+    if(localStorage.getItem('visitas')) {
+      let visitas = parseInt(localStorage.getItem('visitas')) + 1;
+      localStorage.setItem('visitas', visitas);
+      document.getElementById('visitorCounter').textContent = visitas;
+    } else {
+      localStorage.setItem('visitas', 1);
+      document.getElementById('visitorCounter').textContent = 1;
+    }
+  </script>
+</body>
+</html>
