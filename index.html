@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zona Hidalgo Radio</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="header-container">
+    <img src="img/logo.jpg" alt="Zona Hidalgo" class="logo" />
+    <span class="site-name">ZONA HIDALGO</span>
+    <nav>
+      <ul class="menu">
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#programacion">Programación</a></li>
+        <li><a href="#nosotros">Nosotros</a></li>
+        <li><a href="#staff">Staff</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero -->
+<section id="inicio" class="hero">
+  <!-- <div class="overlay"></div> -->
+  <div class="hero-content">
+    <h2>¡Tu estación favorita en México!</h2>
+    <p>Música, cultura y entretenimiento 24/7</p>
+    <div class="player-box">
+      <h3>🔴 En Vivo</h3>
+      <audio controls>
+        <source src="https://stream.zeno.fm/5w2xq3z6xuhvv" type="audio/mpeg" />
+        Tu navegador no soporta el reproductor de audio.
+      </audio>
+      <div class="buttons">
+        <a href="https://zonahidalgo.radiostream123.com/" target="_blank" class="btn-purple">▶ Escuchar Ahora</a>
+        <a href="https://wa.me/7751641031" target="_blank" class="btn-gold">📩 Enviar Mensaje</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Programación -->
+<section id="programacion" class="section">
+  <h2>📅 Nuestra Programación</h2>
+  <div class="program-container">
+
+    <!-- Programa 1 -->
+    <div class="program-card" data-modal="modal1">
+      <img src="img/programa1.jpg" alt="Encuentros Cercanos">
+    </div>
+
+    <!-- Programa 2 -->
+    <div class="program-card" data-modal="modal2">
+      <img src="img/programa2.jpg" alt="Chismecito con Susune">
+    </div>
+
+    <!-- Programa 3 -->
+    <div class="program-card" data-modal="modal3">
+      <img src="img/programa3.jpg" alt="La Forja del Metal">
+    </div>
+    
+  </div>
+
+  <!-- Modals de Programas -->
+  <div id="modal1" class="program-modal">
+    <div class="program-modal-content">
+      <span class="close-btn">&times;</span>
+      <h3>Encuentros Cercanos</h3>
+      <p>Radio Show con SUSUNE y CHAVAROCK<br>
+      Miércoles y viernes de 9PM a 10PM</p>
+    </div>
+  </div>
+
+  <div id="modal2" class="program-modal">
+    <div class="program-modal-content">
+      <span class="close-btn">&times;</span>
+      <h3>Chismecito con Susune</h3>
+      <p>Martes y Jueves de 7PM a 8PM</p>
+    </div>
+  </div>
+
+  <div id="modal3" class="program-modal">
+    <div class="program-modal-content">
+      <span class="close-btn">&times;</span>
+      <h3>La Forja del Metal</h3>
+      <p>Lunes a viernes con CHAVAROCK de 10PM a 2AM</p>
+    </div>
+  </div>
+</section>
+
+<!-- Nosotros -->
+<section id="nosotros" class="section">
+  <h2>ℹ️ Nosotros</h2>
+  <p>
+    Zona Hidalgo estación de radio independiente transmitiendo desde Tepeapulco Hidalgo, con el respaldo de <strong>Producciones Escénicas Y... ¿Por qué No?</strong>, con el actor <strong>Argel Jovanny Zamora Lozano</strong> y el director <strong>Salvador Aguayo</strong>. Transmitimos las 24 horas los 365 días del año. Fundada el <strong>1 de Septiembre del 2025</strong>.
+  </p>
+</section>
+
+<!-- STAFF -->
+<section id="staff" class="section">
+  <h2>Nuestro Staff</h2>
+  <div class="staff-container">
+    
+    <!-- Damaris -->
+    <div class="staff-card" data-modal="modalDamaris">
+      <img src="img/Damaris.jpg" alt="Damaris" class="staff-photo">
+      <div class="staff-info">
+        <h3>Damaris (Susume)</h3>
+      </div>
+    </div>
+
+    <!-- Norma -->
+    <div class="staff-card" data-modal="modalNorma">
+      <img src="img/Norma.jpg" alt="Norma Angélica Medrano" class="staff-photo">
+      <div class="staff-info">
+        <h3>Norma Angélica Medrano</h3>
+      </div>
+    </div>
+
+    <!-- Argel -->
+    <div class="staff-card" data-modal="modalArgel">
+      <img src="img/Argel.jpg" alt="Argel Jovanny Zamora Lozano" class="staff-photo">
+      <div class="staff-info">
+        <h3>Argel Jovanny Zamora Lozano</h3>
+        <h4>CEO de Zona Hidalgo</h4>
+      </div>
+    </div>
+
+    <!-- Juan -->
+    <div class="staff-card" data-modal="modalJuan">
+      <img src="img/Juan.jpg" alt="Juan Manuel López Loya" class="staff-photo">
+      <div class="staff-info">
+        <h3>Juan Manuel López Loya</h3>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modals de Staff -->
+  <div id="modalDamaris" class="staff-modal">
+    <div class="staff-modal-content">
+      <span class="close-btn">&times;</span>
+      <h3>Damaris (Susume)</h3>
+      <p>Hola, soy Damaris (Susume), la loca de los animales 🐾. Me gustan casi todos los animales excepto insectos, porque si no grito como loca xd. Tengo 24 años y me gusta mucho escuchar música, bailar y cantar.</p>
+    </div>
+  </div>
+
+  <div id="modalNorma" class="staff-modal">
+    <div class="staff-modal-content">
+      <span class="close-btn">&times;</span>
+      <h3>Norma Angélica Medrano</h3>
+      <p>Mujer activista en pro de las personas con discapacidad y neurodiversidad. Madre de 2 hijas, una de ellas diagnosticada con Autismo y discapacidad intelectual. Amante de la música, el baile y el canto. Se une al equipo de ZONA HIDALGO en una nueva faceta como locutora. 🎙️</p>
+    </div>
+  </div>
+
+  <div id="modalArgel" class="staff-modal">
+    <div class="staff-modal-content">
+      <span class="close-btn">&times;</span>
+      <h3>Argel Jovanny Zamora Lozano</h3>
+      <h4>CEO de Zona Hidalgo</h4>
+      <p>Con tan solo 24 años, lidera la estación de radio Zona Hidalgo Radio con una visión fresca, inclusiva y orientada a la innovación. Egresado del CBTis No. 59 como Técnico Programador, combina su formación tecnológica con una destacada trayectoria en las artes escénicas. Su experiencia en teatro, locución y doblaje fortalecen su liderazgo. Vive con epilepsia, transformando los desafíos en resiliencia y determinación.<br><br>Bajo su dirección, Zona Hidalgo Radio busca consolidarse como un espacio cultural de referencia.<br><br><em>“Todo el esfuerzo es inútil si no crees en ti mismo.”</em></p>
+    </div>
+  </div>
+
+  <div id="modalJuan" class="staff-modal">
+    <div class="staff-modal-content">
+      <span class="close-btn">&times;</span>
+      <h3>Juan Manuel López Loya</h3>
+      <p>Joven político de 24 años. Ex presidente del Ateneo Nacional de la Juventud y ex secretario de redes sociales de Rediseña. Ex cuadro del PRI y ex líder de Red Jóvenes por México. Comprometido con lo social y el bienestar comunitario. 🤝</p>
+    </div>
+  </div>
+</section>
+
+<!-- Contacto -->
+<section id="contacto" class="section">
+  <h2>📩 Contáctanos</h2>
+  <p>Tel: <strong>7751641031</strong></p>
+  <p>Correo: <a href="mailto:zonahidalgo38@gmail.com">zonahidalgo38@gmail.com</a></p>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>© 2025 Zona Hidalgo Radio | Síguenos en redes</p>
+  <div class="social">
+    <a href="https://www.facebook.com/profile.php?id=61579811332106" target="_blank">Facebook</a>
+    <a href="https://www.tiktok.com/@zona.hidalgo" target="_blank">TikTok</a>
+  </div>
+  <div class="visitas">
+    👥 Visitantes en la página: <span id="visitorCounter">0</span>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script>
+  // Contador de visitas
+  if(localStorage.getItem('visitas')) {
+    let visitas = parseInt(localStorage.getItem('visitas')) + 1;
+    localStorage.setItem('visitas', visitas);
+    document.getElementById('visitorCounter').textContent = visitas;
+  } else {
+    localStorage.setItem('visitas', 1);
+    document.getElementById('visitorCounter').textContent = 1;
+  }
+
+  // Staff modals
+  const staffCards = document.querySelectorAll('.staff-card');
+  const staffModals = document.querySelectorAll('.staff-modal');
+
+  staffCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const modal = document.getElementById(card.dataset.modal);
+      modal.style.display = 'block';
+    });
+  });
+
+  staffModals.forEach(modal => {
+    modal.querySelector('.close-btn').addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+    modal.addEventListener('click', e => {
+      if(e.target === modal) modal.style.display = 'none';
+    });
+  });
+
+  // Program modals
+  const programCards = document.querySelectorAll('.program-card');
+  const programModals = document.querySelectorAll('.program-modal');
+
+  programCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const modal = document.getElementById(card.dataset.modal);
+      modal.style.display = 'block';
+    });
+  });
+
+  programModals.forEach(modal => {
+    modal.querySelector('.close-btn').addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+    modal.addEventListener('click', e => {
+      if(e.target === modal) modal.style.display = 'none';
+    });
+  });
+</script>
+
+</body>
+</html>
