@@ -26,24 +26,19 @@
 </header>
 
 <!-- Hero -->
-<section id="inicio" class="hero">
-  <!-- <div class="overlay"></div> -->
-  <div class="hero-content">
+<section id="inicio" class="hero" style="background: url('log3.png') no-repeat center center/cover; position: relative;">
+  <div class="overlay" style="position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.4);"></div>
+  <div class="hero-content" style="position: relative; z-index:1; color: white;">
     <h2>¡Tu estación favorita en México!</h2>
     <p>Música, cultura y entretenimiento 24/7</p>
-    <div class="player-box">
-      <h3>🔴 En Vivo</h3>
-      <audio controls>
-        <source src="https://stream.zeno.fm/5w2xq3z6xuhvv" type="audio/mpeg" />
-        Tu navegador no soporta el reproductor de audio.
-      </audio>
-      <div class="buttons">
-        <a href="https://zonahidalgo.radiostream123.com/" target="_blank" class="btn-purple">▶ Escuchar Ahora</a>
-        <a href="https://wa.me/7751641031" target="_blank" class="btn-gold">📩 Enviar Mensaje</a>
-      </div>
+    <div class="buttons">
+      <a href="https://zonahidalgo.radiostream123.com/" target="_blank" class="btn-purple">▶ Escuchar Ahora</a>
+      <a href="https://wa.me/7751641031" target="_blank" class="btn-gold">📩 Enviar Mensaje</a>
     </div>
   </div>
 </section>
+
+
 
 <!-- Programación -->
 <section id="programacion" class="section">
@@ -73,7 +68,8 @@
       <span class="close-btn">&times;</span>
       <h3>Encuentros Cercanos</h3>
       <p>Radio Show con SUSUNE y CHAVAROCK<br>
-      Miércoles y viernes de 9PM a 10PM</p>
+      <br>
+      Miércoles y Viernes de 9:00PM a 10:00PM</p>
     </div>
   </div>
 
@@ -81,7 +77,7 @@
     <div class="program-modal-content">
       <span class="close-btn">&times;</span>
       <h3>Chismecito con Susune</h3>
-      <p>Martes y Jueves de 7PM a 8PM</p>
+      <p>Martes y Jueves de 7:00PM a 8:00PM</p>
     </div>
   </div>
 
@@ -89,7 +85,7 @@
     <div class="program-modal-content">
       <span class="close-btn">&times;</span>
       <h3>La Forja del Metal</h3>
-      <p>Lunes a viernes con CHAVAROCK de 10PM a 2AM</p>
+      <p>Lunes a Viernes con CHAVAROCK de 10:00PM a 2:00AM</p>
     </div>
   </div>
 </section>
@@ -140,6 +136,14 @@
       </div>
     </div>
 
+    <!-- Salvador (NUEVO) -->
+    <div class="staff-card" data-modal="modalSalvador">
+      <img src="Salvador.jpg" alt="Salvador Aguayo" class="staff-photo">
+      <div class="staff-info">
+        <h3>Salvador Aguayo</h3>
+      </div>
+    </div>
+
   </div>
 
   <!-- Modals de Staff -->
@@ -175,6 +179,16 @@
       <p>Joven político de 24 años. Ex presidente del Ateneo Nacional de la Juventud y ex secretario de redes sociales de Rediseña. Ex cuadro del PRI y ex líder de Red Jóvenes por México. Comprometido con lo social y el bienestar comunitario. 🤝</p>
     </div>
   </div>
+
+  <!-- Modal Salvador (NUEVO) -->
+  <div id="modalSalvador" class="staff-modal">
+    <div class="staff-modal-content">
+      <span class="close-btn">&times;</span>
+      <h3>Salvador Aguayo</h3>
+      <p>Actor y Director de Teatro. Productor de la compañía; Producciones Escénicas Y... ¿Por Qué No?. Activista social enfocado en apoyar al arte y la cultura, así mismo como defensor de las tradiciones de los pueblos indígenas y nativos. Actualmente incursionando en la locución, amante de la música, especialmente del género del metal. Defensor de las causas nobles y de las personas que más lo necesiten.</p>
+    </div>
+  </div>
+
 </section>
 
 <!-- Contacto -->
