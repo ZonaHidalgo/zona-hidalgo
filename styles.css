@@ -389,3 +389,9 @@ footer {
 #modal3 .program-modal-content {
   background: linear-gradient(135deg, #000000, #ff4500, #ff0000); /* negro naranja rojo degradado */
 }
+/* Nuevo programa CyA */
+#modalCyA .program-modal-content {
+  background: linear-gradient(135deg, #ff0000, #1e90ff); /* rojo a azul */
+}
+
+
