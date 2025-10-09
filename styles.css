@@ -394,6 +394,12 @@ footer {
 #modalCyA .program-modal-content {
   background: linear-gradient(135deg, #db0808, hsl(223, 81%, 50%), hwb(52 48% 5%));
 }
+/* Modal En Concierto Con: negro, azul y amarillo metálico */
+#modalECN .program-modal-content {
+  background: linear-gradient(135deg, #000000, #1e90ff, #f4c95d);
+  color: #ffffff;
+}
+
 
 
 
