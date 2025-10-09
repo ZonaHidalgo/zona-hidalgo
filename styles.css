@@ -8,12 +8,11 @@ body {
   color: #1a1a1a;
 }
 .valores-list {
-  text-align: left;
-  max-width: 800px;
-  margin: 0 auto; /* centra la lista dentro de la sección */
-  padding-left: 20px;
+  text-align: left;     /* Alinea todo a la izquierda */
+  padding-left: 0;      /* Elimina margen interno extra */
+  margin: 20px 0 0 0;   /* Separación desde el título */
   line-height: 1.6;
-  list-style: disc;
+  list-style: disc inside; /* Los bullets se alinean con el texto */
 }
 
 
@@ -408,6 +407,7 @@ footer {
   background: linear-gradient(135deg, #000000, #1e90ff, #f4c95d);
   color: #ffffff;
 }
+
 
 
 
