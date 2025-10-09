@@ -7,6 +7,7 @@ body {
   background-color: #ffffff;
   color: #1a1a1a;
 }
+
 .valores-list {
   text-align: left;     /* Alinea todo a la izquierda */
   padding-left: 0;      /* Elimina margen interno extra */
@@ -14,7 +15,6 @@ body {
   line-height: 1.6;
   list-style: disc inside; /* Los bullets se alinean con el texto */
 }
-
 
 .site-name {
   font-size: 1.1em;
@@ -398,20 +398,94 @@ footer {
 #modal3 .program-modal-content {
   background: linear-gradient(135deg, #000000, #ff4500, #ff0000); /* negro naranja rojo degradado */
 }
+
 /* Nuevo programa CyA */
 #modalCyA .program-modal-content {
   background: linear-gradient(135deg, #db0808, hsl(223, 81%, 50%), hwb(52 48% 5%));
 }
+
 /* Modal En Concierto Con: negro, azul y amarillo metálico */
 #modalECN .program-modal-content {
   background: linear-gradient(135deg, #000000, #1e90ff, #f4c95d);
   color: #ffffff;
 }
 
+/* =========================
+   RESPONSIVE
+========================= */
+@media screen and (max-width: 1024px) {
+  .header-container {
+    padding: 0 15px;
+  }
+  .hero-content h2 {
+    font-size: 2.2em;
+  }
+  .hero-content p {
+    font-size: 1.1em;
+  }
+}
 
+@media screen and (max-width: 768px) {
+  /* Header y menú */
+  .header-container {
+    flex-direction: column;
+    gap: 10px;
+  }
 
+  .menu {
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
 
+  /* Hero */
+  .hero {
+    height: 50vh;
+  }
+  .hero-content h2 {
+    font-size: 1.8em;
+  }
+  .hero-content p {
+    font-size: 1em;
+  }
 
+  /* Cards de staff y programas */
+  .staff-card, .program-card, .card {
+    width: 90%; /* Se adaptan al ancho del móvil */
+    margin: auto;
+  }
 
+  /* Player */
+  .player-box {
+    max-width: 95%;
+    padding: 15px;
+  }
 
+  /* Footer redes sociales */
+  .social {
+    flex-direction: column;
+    gap: 10px;
+  }
 
+  /* Valores list */
+  .valores-list {
+    padding-left: 10px;
+    text-align: left;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .hero {
+    height: 40vh;
+  }
+  .hero-content h2 {
+    font-size: 1.5em;
+  }
+  .hero-content p {
+    font-size: 0.95em;
+  }
+  .btn-purple, .btn-gold {
+    padding: 8px 15px;
+    font-size: 0.9em;
+  }
+}
