@@ -391,7 +391,8 @@ footer {
 }
 /* Nuevo programa CyA */
 #modalCyA .program-modal-content {
-  background: linear-gradient(135deg, #ff0000, #1e90ff); /* rojo a azul */
+  background: linear-gradient(135deg, #db0808, hsl(223, 81%, 50%), hwb(52 48% 5%));
 }
+
 
 
