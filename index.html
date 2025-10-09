@@ -296,20 +296,34 @@
 
 <!-- Scripts -->
 <script>
-// Usando CountAPI para visitas globales
-  const visitorCounter = document.getElementById('visitorCounter');
-  const key = 'zona_hidalgo_radio'; // nombre único para tu contador
-  const namespace = 'zonahidalgo'; // namespace único para tu sitio
+const counterElement = document.getElementById('visitorCounter');
+const countApiUrl = 'https://api.countapi.xyz/hit/zonahidalgo/zona_hidalgo_radio';
 
-  // Hacer petición para incrementar el contador
-  fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
-    .then(res => res.json())
-    .then(data => {
-      visitorCounter.textContent = data.value;
-    })
-    .catch(err => {
-      console.error('Error al obtener contador:', err);
-    });
+// Función para actualizar el contador en la página
+function actualizarContador(visitas) {
+  counterElement.textContent = visitas;
+}
+
+// Intentamos llamar a CountAPI
+fetch(countApiUrl)
+  .then(response => response.json())
+  .then(data => {
+    if (data && data.value !== undefined) {
+      actualizarContador(data.value);
+      // Guardamos localmente por si hay problemas después
+      localStorage.setItem('visitas_real', data.value);
+    } else {
+      // fallback si la API no devuelve valor
+      const visitasLocal = localStorage.getItem('visitas_real') || 0;
+      actualizarContador(visitasLocal);
+    }
+  })
+  .catch(err => {
+    console.error('Error al obtener contador:', err);
+    // fallback local
+    const visitasLocal = localStorage.getItem('visitas_real') || 0;
+    actualizarContador(visitasLocal);
+  });
 
   // Staff modals
   const staffCards = document.querySelectorAll('.staff-card');
