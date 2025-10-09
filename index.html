@@ -35,32 +35,11 @@
     <h2>¡Tu estación favorita en México!</h2>
     <p>Música, cultura y entretenimiento 24/7</p>
     <div class="buttons">
+      <a href="https://zonahidalgo.radiostream123.com/" target="_blank" class="btn-purple">▶ Escuchar Ahora</a>
       <a href="https://wa.me/7751641031" target="_blank" class="btn-gold">📩 Enviar Mensaje</a>
     </div>
-    <!-- Botón para activar el reproductor -->
-<a href="#" class="btn-purple" onclick="mostrarReproductor()">▶ Escuchar Ahora</a>
-
-<!-- Contenedor vacío donde se insertará el reproductor -->
-<div id="radioPlayer" style="margin-top: 20px;"></div>
-
-<!-- Script que inserta el reproductor solo cuando se hace clic -->
-<script>
-  function mostrarReproductor() {
-    const container = document.getElementById('radioPlayer');
-    if (container.innerHTML === "") {
-      container.innerHTML = `
-        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
-          <h3 style="color: #fff; font-family: 'Segoe UI', sans-serif;">🔊 Escuchando en vivo</h3>
-          <iframe src="https://zonahidalgo.radiostream123.com/" width="100%" height="150" frameborder="0" allow="autoplay"></iframe>
-        </div>
-      `;
-      window.scrollTo({ top: container.offsetTop, behavior: 'smooth' });
-    }
-  }
-</script>
   </div>
 </section>
-
 
 <!-- Programación -->
 <section id="programacion" class="section">
