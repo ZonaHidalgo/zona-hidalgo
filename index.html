@@ -289,22 +289,27 @@
     <a href="https://www.facebook.com/profile.php?id=61579811332106" target="_blank">Facebook</a>
     <a href="https://www.tiktok.com/@zona.hidalgo" target="_blank">TikTok</a>
   </div>
-  <div class="visitas">
-    👥 Visitantes en la página: <span id="visitorCounter">0</span>
-  </div>
+ <div class="visitas">
+  👥 Visitantes en la página: <span id="visitorCounter">0</span>
+</div>
 </footer>
 
 <!-- Scripts -->
 <script>
-  // Contador de visitas
-  if(localStorage.getItem('visitas')) {
-    let visitas = parseInt(localStorage.getItem('visitas')) + 1;
-    localStorage.setItem('visitas', visitas);
-    document.getElementById('visitorCounter').textContent = visitas;
-  } else {
-    localStorage.setItem('visitas', 1);
-    document.getElementById('visitorCounter').textContent = 1;
-  }
+// Usando CountAPI para visitas globales
+  const visitorCounter = document.getElementById('visitorCounter');
+  const key = 'zona_hidalgo_radio'; // nombre único para tu contador
+  const namespace = 'zonahidalgo'; // namespace único para tu sitio
+
+  // Hacer petición para incrementar el contador
+  fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+    .then(res => res.json())
+    .then(data => {
+      visitorCounter.textContent = data.value;
+    })
+    .catch(err => {
+      console.error('Error al obtener contador:', err);
+    });
 
   // Staff modals
   const staffCards = document.querySelectorAll('.staff-card');
