@@ -379,7 +379,8 @@ footer {
 
 /* Modals de programas con colores que combinen */
 #modal1 .program-modal-content {
- background: linear-gradient(135deg, #000000, hsl(121, 77%, 35%), hwb(136 4% 60%));
+ background: linear-gradient(135deg, #000000, #0a5e3a); /* negro a verde */
+  color: #ffffff;
 }
 
 #modal2 .program-modal-content {
@@ -393,6 +394,7 @@ footer {
 #modalCyA .program-modal-content {
   background: linear-gradient(135deg, #db0808, hsl(223, 81%, 50%), hwb(52 48% 5%));
 }
+
 
 
 
