@@ -7,6 +7,15 @@ body {
   background-color: #ffffff;
   color: #1a1a1a;
 }
+.valores-list {
+  text-align: left;
+  max-width: 800px;
+  margin: 0 auto; /* centra la lista dentro de la sección */
+  padding-left: 20px;
+  line-height: 1.6;
+  list-style: disc;
+}
+
 
 .site-name {
   font-size: 1.1em;
@@ -399,6 +408,7 @@ footer {
   background: linear-gradient(135deg, #000000, #1e90ff, #f4c95d);
   color: #ffffff;
 }
+
 
 
 
