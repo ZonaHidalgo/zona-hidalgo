@@ -1,17 +1,19 @@
-// ---------- contador limpio y funcional ----------
+// ============================================
+// zona-hidalgo-counter.js (versión estable y limpia)
+// ============================================
+
 document.addEventListener("DOMContentLoaded", () => {
   const counterElement = document.getElementById("visitorCounter");
+  const baseUrl = "https://api.counterapi.dev/v2/zonahidalgos-team-1562/zona-hidalgo-visitantes";
+
   if (!counterElement) return console.warn("No se encontró #visitorCounter en la página.");
 
-  const baseUrl = "https://api.counterapi.dev/v2/zonahidalgos-team-1562/zona-hidalgo-visitantes"; // revisa esto
-  const LS_VISITED_KEY = "zonaHidalgoVisited_v2";
-  const SS_INCREMENT_KEY = "zonaHidalgoIncrementedThisSession_v2";
-
-  // evita doble ejecución si el script se carga más de una vez
+  // Evita dobles ejecuciones en la misma carga
   if (window.__zonaHidalgo_counter_running) return;
   window.__zonaHidalgo_counter_running = true;
 
-  counterElement.style.transition = 'opacity 0.3s ease-in-out';
+  const LS_VISITED_KEY = "zonaHidalgoVisited_v2";
+  const SS_INCREMENT_KEY = "zonaHidalgoIncrementedThisSession_v2";
 
   function looksLikeBot() {
     const ua = navigator.userAgent || "";
@@ -26,18 +28,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function fetchWithGuard(url) {
     try {
-      console.debug("ZonaHidalgo: fetch ->", url);
       const resp = await fetch(url, { method: "GET", cache: "no-store", mode: "cors" });
-      console.debug("ZonaHidalgo: status", resp.status);
-      if (!resp.ok) {
-        console.warn("ZonaHidalgo: respuesta no OK", resp.status, resp.statusText);
-        return null;
-      }
-      const json = await resp.json();
-      console.debug("ZonaHidalgo: json", json);
-      return json;
-    } catch (err) {
-      console.error("ZonaHidalgo: fetch error", err);
+      if (!resp.ok) return null;
+      return await resp.json();
+    } catch {
       return null;
     }
   }
@@ -53,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function fetchAndShow(increment = false) {
-    const url = `${baseUrl}` + (increment ? "/up" : "");
+    const url = baseUrl + (increment ? "/up" : "");
     const json = await fetchWithGuard(url);
     if (json) {
       counterElement.textContent = extractCount(json);
@@ -71,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return await fetchAndShow(false);
       }
 
-      // evitar recuento múltiple en la misma sesión
+      // Evitar recuento en la misma sesión
       if (sessionStorage.getItem(SS_INCREMENT_KEY)) {
         console.log("ZonaHidalgo: ya incrementado esta sesión");
         return await fetchAndShow(false);
@@ -86,7 +80,6 @@ document.addEventListener("DOMContentLoaded", () => {
           localStorage.setItem(LS_VISITED_KEY, "true");
           counterElement.textContent = extractCount(incResp);
         } else {
-          // si no pudo incrementar, igual mostramos el conteo actual (si existe)
           await fetchAndShow(false);
         }
       } else {
@@ -98,22 +91,95 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // inicializador público
-  function initVisitorCounter() {
-    // ejecuta cuando la página ya sea visible (evita contar si está en background)
-    if (document.visibilityState !== "visible") {
-      document.addEventListener("visibilitychange", function onVis() {
-        if (document.visibilityState === "visible") {
-          document.removeEventListener("visibilitychange", onVis);
-          runCounter();
-        }
-      });
-    } else {
-      runCounter();
-    }
+  // Ejecutar cuando la página esté visible
+  if (document.visibilityState !== "visible") {
+    document.addEventListener("visibilitychange", function onVis() {
+      if (document.visibilityState === "visible") {
+        document.removeEventListener("visibilitychange", onVis);
+        runCounter();
+      }
+    });
+  } else {
+    runCounter();
   }
 
-  // arranca
-  initVisitorCounter();
+  // Agregar transición CSS para animación suave
+  counterElement.style.transition = "opacity 0.3s ease-in-out";
 });
-// ---------- fin contador ----------
+
+
+// ============================================
+// MODALS - STAFF Y PROGRAMAS
+// ============================================
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  // ===== MODALS DE STAFF =====
+  const staffCards = document.querySelectorAll(".staff-card");
+  const staffModals = document.querySelectorAll(".staff-modal");
+
+  staffCards.forEach(card => {
+    card.addEventListener("click", () => {
+      const modalId = card.dataset.modal;
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.style.display = "block";
+      }
+    });
+  });
+
+  staffModals.forEach(modal => {
+    const closeBtn = modal.querySelector(".close-btn");
+
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+      });
+    }
+
+    modal.addEventListener("click", e => {
+      if (e.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+  });
+
+  // ===== MODALS DE PROGRAMAS =====
+  const programCards = document.querySelectorAll(".program-card");
+  const programModals = document.querySelectorAll(".program-modal");
+
+  programCards.forEach(card => {
+    card.addEventListener("click", () => {
+      const modalId = card.dataset.modal;
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.style.display = "block";
+      }
+    });
+  });
+
+  programModals.forEach(modal => {
+    const closeBtn = modal.querySelector(".close-btn");
+
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+      });
+    }
+
+    modal.addEventListener("click", e => {
+      if (e.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+  });
+
+  // Cerrar modals con tecla ESC
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") {
+      document.querySelectorAll(".staff-modal, .program-modal").forEach(modal => {
+        modal.style.display = "none";
+      });
+    }
+  });
+});
