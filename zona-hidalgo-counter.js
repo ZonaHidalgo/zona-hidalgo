@@ -97,4 +97,98 @@ document.addEventListener("DOMContentLoaded", () => {
       counterElement.textContent = "—";
     }
   }
+  // ========== INICIALIZACIÓN ==========
+  
+  // Ejecutar cuando el DOM esté listo
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initVisitorCounter);
+  } else {
+    // El DOM ya está listo
+    initVisitorCounter();
+  }
+
+  // Agregar transición CSS para animación suave
+  if (counterElement) {
+    counterElement.style.transition = 'opacity 0.3s ease-in-out';
+  }
+
+})();
+
+// ============================================
+// MODALS - STAFF Y PROGRAMAS
+// ============================================
+
+document.addEventListener('DOMContentLoaded', function() {
+  
+  // ===== MODALS DE STAFF =====
+  const staffCards = document.querySelectorAll('.staff-card');
+  const staffModals = document.querySelectorAll('.staff-modal');
+
+  staffCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const modalId = card.dataset.modal;
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.style.display = 'block';
+      }
+    });
+  });
+
+  staffModals.forEach(modal => {
+    const closeBtn = modal.querySelector('.close-btn');
+    
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+      });
+    }
+    
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+  });
+
+  // ===== MODALS DE PROGRAMAS =====
+  const programCards = document.querySelectorAll('.program-card');
+  const programModals = document.querySelectorAll('.program-modal');
+
+  programCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const modalId = card.dataset.modal;
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.style.display = 'block';
+      }
+    });
+  });
+
+  programModals.forEach(modal => {
+    const closeBtn = modal.querySelector('.close-btn');
+    
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+      });
+    }
+    
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+  });
+
+  // Cerrar modals con tecla ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.staff-modal, .program-modal').forEach(modal => {
+        modal.style.display = 'none';
+      });
+    }
+  });
+  
 });
+});
+
