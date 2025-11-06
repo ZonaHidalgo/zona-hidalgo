@@ -1,65 +1,86 @@
 // ============================================
-// CONTADOR COMPARTIDO DE VISITANTES ÚNICOS - ZONA HIDALGO
+// CONTADOR DE VISITANTES ÚNICOS - ZONA HIDALGO
+// Usando CounterAPI.dev
 // ============================================
 
 (function() {
   'use strict';
 
-  // Claves para el almacenamiento
-  const VISITOR_KEY = 'zona_hidalgo_user_visited'; // Local: marca si este usuario ya visitó
-  const SHARED_COUNT_KEY = 'zona_hidalgo_total_count'; // Compartido: contador global
+  // Configuración de CounterAPI
+  const WORKSPACE_SLUG = 'zonahidalgos-team-1562';
+  const COUNTER_SLUG = 'zona-hidalgo-visitantes';
+  const API_BASE_URL = 'https://api.counterapi.dev/v1';
+  
+  // Clave local para marcar si este usuario ya visitó
+  const LOCAL_VISITOR_KEY = 'zona_hidalgo_user_visited';
   
   // Elemento del contador en el DOM
   const counterElement = document.getElementById('visitorCounter');
 
-  // ========== FUNCIONES DE ALMACENAMIENTO ==========
+  // ========== FUNCIONES DE API ==========
   
   /**
-   * Obtiene el conteo compartido global
+   * Obtiene el conteo actual del contador
    */
-  async function getSharedCount() {
+  async function getCurrentCount() {
     try {
-      const result = await window.storage.get(SHARED_COUNT_KEY, true);
-      return result ? parseInt(result.value, 10) : 0;
+      const url = `${API_BASE_URL}/${WORKSPACE_SLUG}/${COUNTER_SLUG}`;
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error(`Error HTTP: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      return data.count || 0;
     } catch (error) {
-      // Si no existe, retorna 0
-      return 0;
+      console.error('Error al obtener contador:', error);
+      return null;
     }
   }
 
   /**
-   * Incrementa el contador compartido global
+   * Incrementa el contador en 1
    */
-  async function incrementSharedCount() {
+  async function incrementCounter() {
     try {
-      const currentCount = await getSharedCount();
-      const newCount = currentCount + 1;
-      await window.storage.set(SHARED_COUNT_KEY, newCount.toString(), true);
-      return newCount;
+      const url = `${API_BASE_URL}/${WORKSPACE_SLUG}/${COUNTER_SLUG}/up`;
+      const response = await fetch(url, {
+        method: 'POST'
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Error HTTP: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      return data.count || 0;
     } catch (error) {
       console.error('Error al incrementar contador:', error);
       return null;
     }
   }
 
+  // ========== FUNCIONES LOCALES ==========
+
   /**
-   * Verifica si este usuario ya visitó (almacenamiento local del navegador)
+   * Verifica si este usuario ya visitó antes
    */
   function hasUserVisited() {
-    return localStorage.getItem(VISITOR_KEY) === 'true';
+    return localStorage.getItem(LOCAL_VISITOR_KEY) === 'true';
   }
 
   /**
-   * Marca al usuario como visitante registrado (almacenamiento local)
+   * Marca al usuario como visitante registrado
    */
   function markUserAsVisited() {
     const timestamp = new Date().toISOString();
-    localStorage.setItem(VISITOR_KEY, 'true');
-    localStorage.setItem(VISITOR_KEY + '_date', timestamp);
+    localStorage.setItem(LOCAL_VISITOR_KEY, 'true');
+    localStorage.setItem(LOCAL_VISITOR_KEY + '_date', timestamp);
   }
 
   /**
-   * Actualiza el display del contador en la página
+   * Actualiza el display del contador con animación
    */
   function updateCounterDisplay(count) {
     if (counterElement) {
@@ -77,22 +98,22 @@
   }
 
   /**
-   * Registra información en consola (para debugging)
+   * Registra información en consola
    */
   function logVisitorInfo(isNew, count) {
     const emoji = isNew ? '🎉' : '👋';
     const message = isNew 
-      ? `¡Nuevo visitante! Bienvenido a Zona Hidalgo` 
-      : `Bienvenido de vuelta a Zona Hidalgo`;
+      ? '¡Nuevo visitante! Bienvenido a Zona Hidalgo' 
+      : 'Bienvenido de vuelta a Zona Hidalgo';
     
     console.log(`${emoji} ${message}`);
-    console.log(`📊 Total de visitantes únicos GLOBAL: ${count}`);
+    console.log(`📊 Total de visitantes únicos: ${count}`);
   }
 
   // ========== LÓGICA PRINCIPAL ==========
-  
+
   /**
-   * Inicializa el contador de visitantes compartido
+   * Inicializa el contador de visitantes
    */
   async function initVisitorCounter() {
     try {
@@ -105,13 +126,16 @@
       let currentCount;
 
       if (!userHasVisited) {
-        // Es un visitante nuevo - incrementamos el contador compartido
-        currentCount = await incrementSharedCount();
-        markUserAsVisited();
-        logVisitorInfo(true, currentCount);
+        // Es un visitante nuevo - incrementamos el contador
+        currentCount = await incrementCounter();
+        
+        if (currentCount !== null) {
+          markUserAsVisited();
+          logVisitorInfo(true, currentCount);
+        }
       } else {
         // Ya visitó antes - solo mostramos el conteo actual
-        currentCount = await getSharedCount();
+        currentCount = await getCurrentCount();
         logVisitorInfo(false, currentCount);
       }
       
@@ -126,66 +150,52 @@
     }
   }
 
-  // ========== FUNCIONES GLOBALES (OPCIONAL) ==========
-  
+  // ========== FUNCIONES GLOBALES DE UTILIDAD ==========
+
   /**
-   * Resetea SOLO la marca local de este usuario (para pruebas)
-   * Uso: resetMyVisit()
+   * Resetea la marca local de este usuario (para pruebas)
+   * Uso en consola: resetMyVisit()
    */
   window.resetMyVisit = function() {
-    localStorage.removeItem(VISITOR_KEY);
-    localStorage.removeItem(VISITOR_KEY + '_date');
-    console.log('✅ Tu visita ha sido reseteada localmente');
+    localStorage.removeItem(LOCAL_VISITOR_KEY);
+    localStorage.removeItem(LOCAL_VISITOR_KEY + '_date');
+    console.log('✅ Tu marca de visita ha sido eliminada');
     console.log('🔄 Recarga la página para contar como visitante nuevo');
   };
 
   /**
    * Muestra estadísticas del contador
-   * Uso: showZonaHidalgoStats()
+   * Uso en consola: showZonaHidalgoStats()
    */
   window.showZonaHidalgoStats = async function() {
-    const count = await getSharedCount();
-    const visited = localStorage.getItem(VISITOR_KEY);
-    const visitDate = localStorage.getItem(VISITOR_KEY + '_date');
+    const count = await getCurrentCount();
+    const visited = localStorage.getItem(LOCAL_VISITOR_KEY);
+    const visitDate = localStorage.getItem(LOCAL_VISITOR_KEY + '_date');
     
     console.log('📊 ESTADÍSTICAS ZONA HIDALGO');
     console.log('============================');
-    console.log('Total visitantes únicos (GLOBAL):', count);
+    console.log('Total visitantes únicos:', count);
     console.log('¿Ya visitaste antes?:', visited === 'true' ? 'Sí' : 'No');
     console.log('Fecha de tu primera visita:', visitDate || 'N/A');
     console.log('============================');
   };
 
   /**
-   * Función de ADMIN para resetear el contador global
-   * CUIDADO: Esto afecta a todos los usuarios
-   * Uso: resetGlobalCounter('CONFIRMAR')
+   * Obtiene el contador actual sin incrementar
+   * Uso en consola: await getCounter()
    */
-  window.resetGlobalCounter = async function(confirmText) {
-    if (confirmText !== 'CONFIRMAR') {
-      console.log('⚠️ Para resetear el contador global escribe:');
-      console.log('resetGlobalCounter("CONFIRMAR")');
-      return;
-    }
-    
-    if (confirm('⚠️ ADVERTENCIA: Esto reseteará el contador para TODOS los usuarios. ¿Estás seguro?')) {
-      try {
-        await window.storage.set(SHARED_COUNT_KEY, '0', true);
-        console.log('✅ Contador global reseteado a 0');
-        location.reload();
-      } catch (error) {
-        console.error('❌ Error al resetear:', error);
-      }
-    }
+  window.getCounter = async function() {
+    const count = await getCurrentCount();
+    console.log(`📊 Contador actual: ${count}`);
+    return count;
   };
 
   // ========== INICIALIZACIÓN ==========
-  
+
   // Ejecutar cuando el DOM esté listo
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initVisitorCounter);
   } else {
-    // El DOM ya está listo
     initVisitorCounter();
   }
 
