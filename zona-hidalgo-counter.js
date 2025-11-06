@@ -1,6 +1,6 @@
 // ============================================
 // CONTADOR DE VISITANTES ÚNICOS - ZONA HIDALGO
-// Usando CounterAPI.dev
+// Usando CounterAPI.dev (v2)
 // ============================================
 
 (function() {
@@ -9,7 +9,8 @@
   // Configuración de CounterAPI
   const WORKSPACE_SLUG = 'zonahidalgos-team-1562';
   const COUNTER_SLUG = 'zona-hidalgo-visitantes';
-  const API_BASE_URL = 'https://api.counterapi.dev/v1';
+  const API_BASE_URL = 'https://api.counterapi.dev/v2';
+  const API_KEY = 'YOUR_API_KEY'; // 🔑 Reemplaza con tu clave real
   
   // Clave local para marcar si este usuario ya visitó
   const LOCAL_VISITOR_KEY = 'zona_hidalgo_user_visited';
@@ -18,14 +19,18 @@
   const counterElement = document.getElementById('visitorCounter');
 
   // ========== FUNCIONES DE API ==========
-  
+
   /**
    * Obtiene el conteo actual del contador
    */
   async function getCurrentCount() {
     try {
       const url = `${API_BASE_URL}/${WORKSPACE_SLUG}/${COUNTER_SLUG}`;
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        headers: {
+          "Authorization": `Bearer ${API_KEY}`
+        }
+      });
       
       if (!response.ok) {
         throw new Error(`Error HTTP: ${response.status}`);
@@ -40,13 +45,16 @@
   }
 
   /**
-   * Incrementa el contador en 1
+   * Incrementa el contador en 1 (solo si es nuevo visitante)
    */
   async function incrementCounter() {
     try {
       const url = `${API_BASE_URL}/${WORKSPACE_SLUG}/${COUNTER_SLUG}/up`;
       const response = await fetch(url, {
-        method: 'POST'
+        method: 'GET',
+        headers: {
+          "Authorization": `Bearer ${API_KEY}`
+        }
       });
       
       if (!response.ok) {
@@ -63,29 +71,19 @@
 
   // ========== FUNCIONES LOCALES ==========
 
-  /**
-   * Verifica si este usuario ya visitó antes
-   */
   function hasUserVisited() {
     return localStorage.getItem(LOCAL_VISITOR_KEY) === 'true';
   }
 
-  /**
-   * Marca al usuario como visitante registrado
-   */
   function markUserAsVisited() {
     const timestamp = new Date().toISOString();
     localStorage.setItem(LOCAL_VISITOR_KEY, 'true');
     localStorage.setItem(LOCAL_VISITOR_KEY + '_date', timestamp);
   }
 
-  /**
-   * Actualiza el display del contador con animación
-   */
   function updateCounterDisplay(count) {
     if (counterElement) {
       counterElement.style.opacity = '0';
-      
       setTimeout(() => {
         if (count !== null) {
           counterElement.textContent = count.toLocaleString('es-MX');
@@ -97,9 +95,6 @@
     }
   }
 
-  /**
-   * Registra información en consola
-   */
   function logVisitorInfo(isNew, count) {
     const emoji = isNew ? '🎉' : '👋';
     const message = isNew 
@@ -112,12 +107,8 @@
 
   // ========== LÓGICA PRINCIPAL ==========
 
-  /**
-   * Inicializa el contador de visitantes
-   */
   async function initVisitorCounter() {
     try {
-      // Mostrar "Cargando..." mientras se obtiene el conteo
       if (counterElement) {
         counterElement.textContent = 'Cargando...';
       }
@@ -126,20 +117,16 @@
       let currentCount;
 
       if (!userHasVisited) {
-        // Es un visitante nuevo - incrementamos el contador
         currentCount = await incrementCounter();
-        
         if (currentCount !== null) {
           markUserAsVisited();
           logVisitorInfo(true, currentCount);
         }
       } else {
-        // Ya visitó antes - solo mostramos el conteo actual
         currentCount = await getCurrentCount();
         logVisitorInfo(false, currentCount);
       }
-      
-      // Actualizamos el display
+
       updateCounterDisplay(currentCount);
       
     } catch (error) {
@@ -152,10 +139,6 @@
 
   // ========== FUNCIONES GLOBALES DE UTILIDAD ==========
 
-  /**
-   * Resetea la marca local de este usuario (para pruebas)
-   * Uso en consola: resetMyVisit()
-   */
   window.resetMyVisit = function() {
     localStorage.removeItem(LOCAL_VISITOR_KEY);
     localStorage.removeItem(LOCAL_VISITOR_KEY + '_date');
@@ -163,10 +146,6 @@
     console.log('🔄 Recarga la página para contar como visitante nuevo');
   };
 
-  /**
-   * Muestra estadísticas del contador
-   * Uso en consola: showZonaHidalgoStats()
-   */
   window.showZonaHidalgoStats = async function() {
     const count = await getCurrentCount();
     const visited = localStorage.getItem(LOCAL_VISITOR_KEY);
@@ -180,10 +159,6 @@
     console.log('============================');
   };
 
-  /**
-   * Obtiene el contador actual sin incrementar
-   * Uso en consola: await getCounter()
-   */
   window.getCounter = async function() {
     const count = await getCurrentCount();
     console.log(`📊 Contador actual: ${count}`);
@@ -191,15 +166,12 @@
   };
 
   // ========== INICIALIZACIÓN ==========
-
-  // Ejecutar cuando el DOM esté listo
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initVisitorCounter);
   } else {
     initVisitorCounter();
   }
 
-  // Agregar transición CSS para animación suave
   if (counterElement) {
     counterElement.style.transition = 'opacity 0.3s ease-in-out';
   }
@@ -220,25 +192,17 @@ document.addEventListener('DOMContentLoaded', function() {
     card.addEventListener('click', () => {
       const modalId = card.dataset.modal;
       const modal = document.getElementById(modalId);
-      if (modal) {
-        modal.style.display = 'block';
-      }
+      if (modal) modal.style.display = 'block';
     });
   });
 
   staffModals.forEach(modal => {
     const closeBtn = modal.querySelector('.close-btn');
-    
     if (closeBtn) {
-      closeBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-      });
+      closeBtn.addEventListener('click', () => modal.style.display = 'none');
     }
-    
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.style.display = 'none';
-      }
+    modal.addEventListener('click', e => {
+      if (e.target === modal) modal.style.display = 'none';
     });
   });
 
@@ -250,35 +214,26 @@ document.addEventListener('DOMContentLoaded', function() {
     card.addEventListener('click', () => {
       const modalId = card.dataset.modal;
       const modal = document.getElementById(modalId);
-      if (modal) {
-        modal.style.display = 'block';
-      }
+      if (modal) modal.style.display = 'block';
     });
   });
 
   programModals.forEach(modal => {
     const closeBtn = modal.querySelector('.close-btn');
-    
     if (closeBtn) {
-      closeBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-      });
+      closeBtn.addEventListener('click', () => modal.style.display = 'none');
     }
-    
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.style.display = 'none';
-      }
+    modal.addEventListener('click', e => {
+      if (e.target === modal) modal.style.display = 'none';
     });
   });
 
   // Cerrar modals con tecla ESC
-  document.addEventListener('keydown', (e) => {
+  document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       document.querySelectorAll('.staff-modal, .program-modal').forEach(modal => {
         modal.style.display = 'none';
       });
     }
   });
-  
 });
