@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Cerrar modals con tecla ESC
+    // Cerrar modals con tecla ESC
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       document.querySelectorAll('.staff-modal, .program-modal').forEach(modal => {
@@ -188,7 +188,5 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
   });
-  
-});
 });
 
