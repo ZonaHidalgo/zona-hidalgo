@@ -3,18 +3,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   const counterElement = document.getElementById("visitorCounter");
   const baseUrl = "https://api.counterapi.dev/v2/zonahidalgos-team-1562/zona-hidalgo-visitantes";
 
-  // Revisa si el usuario ya visitó antes (para no contar recargas)
+  // Verifica si ya visitó antes
   const hasVisited = localStorage.getItem("zonaHidalgoVisited");
 
   try {
     let response;
 
     if (!hasVisited) {
-      // Si es la primera visita, incrementa el contador
+      // Primera visita → incrementa
       response = await fetch(`${baseUrl}/up`);
       localStorage.setItem("zonaHidalgoVisited", "true");
     } else {
-      // Si ya visitó antes, solo obtiene el valor actual
+      // Ya visitó → solo obtiene valor actual
       response = await fetch(baseUrl);
     }
 
@@ -22,8 +22,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const data = await response.json();
 
-    // Muestra el valor actual en pantalla
-    counterElement.textContent = data.count ?? "0";
+    // CORRECCIÓN: la API devuelve el contador en data.data.up_count
+    const count = data.data?.up_count ?? 0;
+
+    counterElement.textContent = count;
   } catch (error) {
     console.error(error);
     counterElement.textContent = "Error al cargar";
