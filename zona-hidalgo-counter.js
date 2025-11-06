@@ -1,51 +1,61 @@
 // ============================================
-// CONTADOR DE VISITANTES ÚNICOS - ZONA HIDALGO
+// CONTADOR COMPARTIDO DE VISITANTES ÚNICOS - ZONA HIDALGO
 // ============================================
 
 (function() {
   'use strict';
 
   // Claves para el almacenamiento
-  const VISITOR_KEY = 'zona_hidalgo_visited';
-  const COUNT_KEY = 'zona_hidalgo_visitor_count';
-  const LAST_RESET_KEY = 'zona_hidalgo_last_reset';
+  const VISITOR_KEY = 'zona_hidalgo_user_visited'; // Local: marca si este usuario ya visitó
+  const SHARED_COUNT_KEY = 'zona_hidalgo_total_count'; // Compartido: contador global
   
   // Elemento del contador en el DOM
   const counterElement = document.getElementById('visitorCounter');
 
-  // ========== FUNCIONES AUXILIARES ==========
+  // ========== FUNCIONES DE ALMACENAMIENTO ==========
   
   /**
-   * Obtiene el conteo actual de visitantes
+   * Obtiene el conteo compartido global
    */
-  function getVisitorCount() {
-    const count = localStorage.getItem(COUNT_KEY);
-    return count ? parseInt(count, 10) : 0;
+  async function getSharedCount() {
+    try {
+      const result = await window.storage.get(SHARED_COUNT_KEY, true);
+      return result ? parseInt(result.value, 10) : 0;
+    } catch (error) {
+      // Si no existe, retorna 0
+      return 0;
+    }
   }
 
   /**
-   * Incrementa el contador de visitantes
+   * Incrementa el contador compartido global
    */
-  function incrementVisitorCount() {
-    const currentCount = getVisitorCount();
-    const newCount = currentCount + 1;
-    localStorage.setItem(COUNT_KEY, newCount.toString());
-    return newCount;
+  async function incrementSharedCount() {
+    try {
+      const currentCount = await getSharedCount();
+      const newCount = currentCount + 1;
+      await window.storage.set(SHARED_COUNT_KEY, newCount.toString(), true);
+      return newCount;
+    } catch (error) {
+      console.error('Error al incrementar contador:', error);
+      return null;
+    }
   }
 
   /**
-   * Verifica si es un visitante nuevo
+   * Verifica si este usuario ya visitó (almacenamiento local del navegador)
    */
-  function isNewVisitor() {
-    return localStorage.getItem(VISITOR_KEY) === null;
+  function hasUserVisited() {
+    return localStorage.getItem(VISITOR_KEY) === 'true';
   }
 
   /**
-   * Marca al usuario como visitante registrado
+   * Marca al usuario como visitante registrado (almacenamiento local)
    */
-  function markAsVisited() {
+  function markUserAsVisited() {
     const timestamp = new Date().toISOString();
-    localStorage.setItem(VISITOR_KEY, timestamp);
+    localStorage.setItem(VISITOR_KEY, 'true');
+    localStorage.setItem(VISITOR_KEY + '_date', timestamp);
   }
 
   /**
@@ -53,11 +63,14 @@
    */
   function updateCounterDisplay(count) {
     if (counterElement) {
-      // Animación suave del número
       counterElement.style.opacity = '0';
       
       setTimeout(() => {
-        counterElement.textContent = count.toLocaleString('es-MX');
+        if (count !== null) {
+          counterElement.textContent = count.toLocaleString('es-MX');
+        } else {
+          counterElement.textContent = 'Error';
+        }
         counterElement.style.opacity = '1';
       }, 150);
     }
@@ -73,26 +86,32 @@
       : `Bienvenido de vuelta a Zona Hidalgo`;
     
     console.log(`${emoji} ${message}`);
-    console.log(`📊 Total de visitantes únicos: ${count}`);
+    console.log(`📊 Total de visitantes únicos GLOBAL: ${count}`);
   }
 
   // ========== LÓGICA PRINCIPAL ==========
   
   /**
-   * Inicializa el contador de visitantes
+   * Inicializa el contador de visitantes compartido
    */
-  function initVisitorCounter() {
+  async function initVisitorCounter() {
     try {
+      // Mostrar "Cargando..." mientras se obtiene el conteo
+      if (counterElement) {
+        counterElement.textContent = 'Cargando...';
+      }
+
+      const userHasVisited = hasUserVisited();
       let currentCount;
-      
-      if (isNewVisitor()) {
-        // Es un visitante nuevo - incrementamos
-        currentCount = incrementVisitorCount();
-        markAsVisited();
+
+      if (!userHasVisited) {
+        // Es un visitante nuevo - incrementamos el contador compartido
+        currentCount = await incrementSharedCount();
+        markUserAsVisited();
         logVisitorInfo(true, currentCount);
       } else {
-        // Ya visitó antes - solo mostramos el conteo
-        currentCount = getVisitorCount();
+        // Ya visitó antes - solo mostramos el conteo actual
+        currentCount = await getSharedCount();
         logVisitorInfo(false, currentCount);
       }
       
@@ -110,34 +129,54 @@
   // ========== FUNCIONES GLOBALES (OPCIONAL) ==========
   
   /**
-   * Resetea el contador (útil para pruebas)
-   * Uso: En la consola escribir: resetZonaHidalgoCounter()
+   * Resetea SOLO la marca local de este usuario (para pruebas)
+   * Uso: resetMyVisit()
    */
-  window.resetZonaHidalgoCounter = function() {
-    if (confirm('¿Estás seguro de resetear el contador de visitantes?')) {
-      localStorage.removeItem(VISITOR_KEY);
-      localStorage.removeItem(COUNT_KEY);
-      localStorage.removeItem(LAST_RESET_KEY);
-      console.log('✅ Contador reseteado');
-      location.reload();
-    }
+  window.resetMyVisit = function() {
+    localStorage.removeItem(VISITOR_KEY);
+    localStorage.removeItem(VISITOR_KEY + '_date');
+    console.log('✅ Tu visita ha sido reseteada localmente');
+    console.log('🔄 Recarga la página para contar como visitante nuevo');
   };
 
   /**
    * Muestra estadísticas del contador
-   * Uso: En la consola escribir: showZonaHidalgoStats()
+   * Uso: showZonaHidalgoStats()
    */
-  window.showZonaHidalgoStats = function() {
-    const count = getVisitorCount();
+  window.showZonaHidalgoStats = async function() {
+    const count = await getSharedCount();
     const visited = localStorage.getItem(VISITOR_KEY);
-    const isNew = isNewVisitor();
+    const visitDate = localStorage.getItem(VISITOR_KEY + '_date');
     
     console.log('📊 ESTADÍSTICAS ZONA HIDALGO');
     console.log('============================');
-    console.log('Total visitantes únicos:', count);
-    console.log('¿Usuario nuevo?:', isNew ? 'Sí' : 'No');
-    console.log('Primera visita:', visited || 'N/A');
+    console.log('Total visitantes únicos (GLOBAL):', count);
+    console.log('¿Ya visitaste antes?:', visited === 'true' ? 'Sí' : 'No');
+    console.log('Fecha de tu primera visita:', visitDate || 'N/A');
     console.log('============================');
+  };
+
+  /**
+   * Función de ADMIN para resetear el contador global
+   * CUIDADO: Esto afecta a todos los usuarios
+   * Uso: resetGlobalCounter('CONFIRMAR')
+   */
+  window.resetGlobalCounter = async function(confirmText) {
+    if (confirmText !== 'CONFIRMAR') {
+      console.log('⚠️ Para resetear el contador global escribe:');
+      console.log('resetGlobalCounter("CONFIRMAR")');
+      return;
+    }
+    
+    if (confirm('⚠️ ADVERTENCIA: Esto reseteará el contador para TODOS los usuarios. ¿Estás seguro?')) {
+      try {
+        await window.storage.set(SHARED_COUNT_KEY, '0', true);
+        console.log('✅ Contador global reseteado a 0');
+        location.reload();
+      } catch (error) {
+        console.error('❌ Error al resetear:', error);
+      }
+    }
   };
 
   // ========== INICIALIZACIÓN ==========
