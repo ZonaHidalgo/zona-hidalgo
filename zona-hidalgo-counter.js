@@ -1,16 +1,17 @@
-// zona-hidalgo-counter.js (versión estable y limpia)
+// ---------- contador limpio y funcional ----------
 document.addEventListener("DOMContentLoaded", () => {
   const counterElement = document.getElementById("visitorCounter");
-  const baseUrl = "https://api.counterapi.dev/v2/zonahidalgos-team-1562/zona-hidalgo-visitantes";
-
   if (!counterElement) return console.warn("No se encontró #visitorCounter en la página.");
 
-  // Evita dobles ejecuciones en la misma carga
+  const baseUrl = "https://api.counterapi.dev/v2/zonahidalgos-team-1562/zona-hidalgo-visitantes"; // revisa esto
+  const LS_VISITED_KEY = "zonaHidalgoVisited_v2";
+  const SS_INCREMENT_KEY = "zonaHidalgoIncrementedThisSession_v2";
+
+  // evita doble ejecución si el script se carga más de una vez
   if (window.__zonaHidalgo_counter_running) return;
   window.__zonaHidalgo_counter_running = true;
 
-  const LS_VISITED_KEY = "zonaHidalgoVisited_v2";   // cambiamos el nombre para iniciar limpio
-  const SS_INCREMENT_KEY = "zonaHidalgoIncrementedThisSession_v2";
+  counterElement.style.transition = 'opacity 0.3s ease-in-out';
 
   function looksLikeBot() {
     const ua = navigator.userAgent || "";
@@ -23,57 +24,20 @@ document.addEventListener("DOMContentLoaded", () => {
     return navigator.webdriver || botSignals.some(b => lower.includes(b));
   }
 
-  // Si la página no está visible, esperar
-  if (document.visibilityState !== "visible") {
-    document.addEventListener("visibilitychange", function onVis() {
-      if (document.visibilityState === "visible") {
-        document.removeEventListener("visibilitychange", onVis);
-        runCounter();
-      }
-    });
-  } else {
-    runCounter();
-  }
-
-  async function runCounter() {
-    try {
-      if (looksLikeBot()) {
-        console.log("ZonaHidalgo: Ignorado (bot detectado)");
-        return await fetchAndShow(false);
-      }
-
-      // Evitar recuento en la misma sesión
-      if (sessionStorage.getItem(SS_INCREMENT_KEY)) {
-        console.log("ZonaHidalgo: ya incrementado esta sesión");
-        return await fetchAndShow(false);
-      }
-
-      const alreadyVisited = localStorage.getItem(LS_VISITED_KEY) === "true";
-
-      if (!alreadyVisited) {
-        sessionStorage.setItem(SS_INCREMENT_KEY, "true");
-        const incResp = await fetchWithGuard(`${baseUrl}/up`);
-        if (incResp) {
-          localStorage.setItem(LS_VISITED_KEY, "true");
-          counterElement.textContent = extractCount(incResp);
-        } else {
-          await fetchAndShow(false);
-        }
-      } else {
-        await fetchAndShow(false);
-      }
-    } catch (err) {
-      console.error("ZonaHidalgo: error en runCounter:", err);
-      counterElement.textContent = "Error al cargar";
-    }
-  }
-
   async function fetchWithGuard(url) {
     try {
+      console.debug("ZonaHidalgo: fetch ->", url);
       const resp = await fetch(url, { method: "GET", cache: "no-store", mode: "cors" });
-      if (!resp.ok) return null;
-      return await resp.json();
-    } catch {
+      console.debug("ZonaHidalgo: status", resp.status);
+      if (!resp.ok) {
+        console.warn("ZonaHidalgo: respuesta no OK", resp.status, resp.statusText);
+        return null;
+      }
+      const json = await resp.json();
+      console.debug("ZonaHidalgo: json", json);
+      return json;
+    } catch (err) {
+      console.error("ZonaHidalgo: fetch error", err);
       return null;
     }
   }
@@ -93,100 +57,63 @@ document.addEventListener("DOMContentLoaded", () => {
     const json = await fetchWithGuard(url);
     if (json) {
       counterElement.textContent = extractCount(json);
+      counterElement.style.opacity = "1";
     } else {
       counterElement.textContent = "—";
+      counterElement.style.opacity = "0.6";
     }
   }
-  // ========== INICIALIZACIÓN ==========
-  
-  // Ejecutar cuando el DOM esté listo
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initVisitorCounter);
-  } else {
-    // El DOM ya está listo
-    initVisitorCounter();
+
+  async function runCounter() {
+    try {
+      if (looksLikeBot()) {
+        console.log("ZonaHidalgo: Ignorado (bot detectado)");
+        return await fetchAndShow(false);
+      }
+
+      // evitar recuento múltiple en la misma sesión
+      if (sessionStorage.getItem(SS_INCREMENT_KEY)) {
+        console.log("ZonaHidalgo: ya incrementado esta sesión");
+        return await fetchAndShow(false);
+      }
+
+      const alreadyVisited = localStorage.getItem(LS_VISITED_KEY) === "true";
+
+      if (!alreadyVisited) {
+        sessionStorage.setItem(SS_INCREMENT_KEY, "true");
+        const incResp = await fetchWithGuard(`${baseUrl}/up`);
+        if (incResp) {
+          localStorage.setItem(LS_VISITED_KEY, "true");
+          counterElement.textContent = extractCount(incResp);
+        } else {
+          // si no pudo incrementar, igual mostramos el conteo actual (si existe)
+          await fetchAndShow(false);
+        }
+      } else {
+        await fetchAndShow(false);
+      }
+    } catch (err) {
+      console.error("ZonaHidalgo: error en runCounter:", err);
+      counterElement.textContent = "Error al cargar";
+    }
   }
 
-  // Agregar transición CSS para animación suave
-  if (counterElement) {
-    counterElement.style.transition = 'opacity 0.3s ease-in-out';
+  // inicializador público
+  function initVisitorCounter() {
+    // ejecuta cuando la página ya sea visible (evita contar si está en background)
+    if (document.visibilityState !== "visible") {
+      document.addEventListener("visibilitychange", function onVis() {
+        if (document.visibilityState === "visible") {
+          document.removeEventListener("visibilitychange", onVis);
+          runCounter();
+        }
+      });
+    } else {
+      runCounter();
+    }
   }
 
-})();
-
-// ============================================
-// MODALS - STAFF Y PROGRAMAS
-// ============================================
-
-document.addEventListener('DOMContentLoaded', function() {
-  
-  // ===== MODALS DE STAFF =====
-  const staffCards = document.querySelectorAll('.staff-card');
-  const staffModals = document.querySelectorAll('.staff-modal');
-
-  staffCards.forEach(card => {
-    card.addEventListener('click', () => {
-      const modalId = card.dataset.modal;
-      const modal = document.getElementById(modalId);
-      if (modal) {
-        modal.style.display = 'block';
-      }
-    });
-  });
-
-  staffModals.forEach(modal => {
-    const closeBtn = modal.querySelector('.close-btn');
-    
-    if (closeBtn) {
-      closeBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-      });
-    }
-    
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.style.display = 'none';
-      }
-    });
-  });
-
-  // ===== MODALS DE PROGRAMAS =====
-  const programCards = document.querySelectorAll('.program-card');
-  const programModals = document.querySelectorAll('.program-modal');
-
-  programCards.forEach(card => {
-    card.addEventListener('click', () => {
-      const modalId = card.dataset.modal;
-      const modal = document.getElementById(modalId);
-      if (modal) {
-        modal.style.display = 'block';
-      }
-    });
-  });
-
-  programModals.forEach(modal => {
-    const closeBtn = modal.querySelector('.close-btn');
-    
-    if (closeBtn) {
-      closeBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-      });
-    }
-    
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.style.display = 'none';
-      }
-    });
-  });
-
-    // Cerrar modals con tecla ESC
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      document.querySelectorAll('.staff-modal, .program-modal').forEach(modal => {
-        modal.style.display = 'none';
-      });
-    }
-  });
+  // arranca
+  initVisitorCounter();
 });
-
+// ---------- fin contador ----------
